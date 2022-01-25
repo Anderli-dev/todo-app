@@ -1,14 +1,25 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import generics
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-from .models import CustomUser, Task
-from .serializer import UserSerializer, TaskSerializer
-
-
-class UserView(generics.ListAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+from .serializer import *
 
 
-class TaskView(generics.ListAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+@api_view(['GET'])
+def user_list(request):
+    if request.method == 'GET':
+        users = CustomUser.objects.all()
+        serializer = UserSerializer(users, many=True)
+
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def task_list(request):
+    if request.method == 'GET':
+        task = Task.objects.all()
+        serializer = TaskSerializer(task, many=True)
+
+        return Response(serializer.data)
