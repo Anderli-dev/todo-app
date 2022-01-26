@@ -1,8 +1,9 @@
-from django.template.defaulttags import url
 from django.urls import path
-from .views import user_list, task_list
+
+from .views import LoginView, UserView, TaskView
 
 urlpatterns = [
-    path('users/', user_list),
-    path('tasks/', task_list),
+    path('login/', LoginView.as_view(), name='login'),
+    path('users/', UserView.as_view()),
+    path('tasks/', TaskView.as_view()),
 ]
