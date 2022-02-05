@@ -1,16 +1,19 @@
-from django.contrib.auth import login, logout
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from django.contrib.auth import login, logout, authenticate
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from rest_framework import permissions
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import permission_classes, authentication_classes
-from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializer import *
 
 
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-class UserView(GenericAPIView):
+class UserView(APIView):
     queryset = CustomUser.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -19,9 +22,9 @@ class UserView(GenericAPIView):
         return Response(serializer.data)
 
 
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-class TaskView(GenericAPIView):
+class TaskView(APIView):
     queryset = Task.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -30,23 +33,30 @@ class TaskView(GenericAPIView):
         return Response(serializer.data)
 
 
-class Logout(GenericAPIView):
+class Logout(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request):
         logout(request)
-        return Response(status=200)
+        return Response({'status': 'Success'}, status=200)
 
 
-class LoginView(GenericAPIView):
-    serializer_class = LoginSerializer
+@method_decorator(csrf_protect, name='dispatch')
+class LoginView(APIView):
+    permission_classes = (permissions.AllowAny, )
 
-    def post(self, request, *args, **kwargs, ):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            authenticated_user = authenticate(**serializer.validated_data)
-            if authenticated_user is not None:
-                login(request, authenticated_user)
-                return Response({'status': 'Success'})
+    def post(self, request, form=None):
+        data = self.request.data
+
+        username = data['username']
+        password = data['password']
+        try:
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return Response({'status': 'Success'}, status=200)
             else:
-                return Response({'error': 'Invalid credentials'}, status=403)
-        else:
-            return Response(serializer.errors, status=400)
+                return Response({'error': 'Error Authentication'}, status=403)
+        except:
+            return Response({'error': 'Error in login'})

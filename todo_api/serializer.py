@@ -16,15 +16,3 @@ class TaskSerializer(ModelSerializer):
     class Meta:
         model = Task
         fields = ('title', 'id', 'description', 'created_at', 'author_id')
-
-
-class LoginSerializer(Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
-
-
-class TokenSeriazliser(ModelSerializer):
-
-    class Meta:
-        model = Token
-        fields = ['key']
