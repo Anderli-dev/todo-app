@@ -1,14 +1,83 @@
-from rest_framework import generics
+from django.contrib.auth import login, logout
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from rest_framework import permissions
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import CustomUser, Task
-from .serializer import UserSerializer, TaskSerializer
+from .serializer import *
 
 
-class UserView(generics.ListAPIView):
+class UserView(APIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        users = CustomUser.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
-class TaskView(generics.ListAPIView):
+class TaskView(APIView):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+
+    def get(self, request, *args, **kwargs):
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+
+class Logout(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        logout(request)
+        return Response({"status": "Success"}, status=status.HTTP_200_OK)
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class LoginView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        data = self.request.data
+
+        username = data["username"]
+        password = data["password"]
+
+        try:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return Response({"status": "Success"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Error Authentication"}, status=status.HTTP_403_FORBIDDEN)
+        except():
+            return Response({"error": "Error in login"}, status.HTTP_400_BAD_REQUEST)
+
+
+# use this just for dev
+@method_decorator(csrf_protect, name="dispatch")
+class CheckAuthenticatedView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, format=None):
+        user = self.request.user
+
+        try:
+            isAuthenticated = user.is_authenticated
+
+            if isAuthenticated:
+                return Response({"isAuthenticated": "success"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"isAuthenticated": "error"}, status=status.HTTP_403_FORBIDDEN)
+        except:
+            return Response({"error": "Something went wrong when checking authentication status"})
+
+
+@method_decorator(ensure_csrf_cookie, name="dispatch")
+class GetCSRFToken(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        return Response({"success": "CSRF cookie set"}, status=status.HTTP_200_OK)
