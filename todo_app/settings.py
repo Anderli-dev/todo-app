@@ -118,11 +118,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'todo_api.CustomUser'
 
-
 CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (
+    'content-type',
+    'X-CSRFTOKEN'
+)
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
