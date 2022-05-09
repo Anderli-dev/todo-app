@@ -42,26 +42,51 @@ export function Login(props) {
     }
 
     return (
-        <div>
+        <div className={"d-flex justify-content-center vh-100 align-items-center"}>
             {res === 403 && (<h1>Wrong username or password</h1>)}
-            <form onSubmit={loginSubmit}>
+            <form onSubmit={loginSubmit} >
                 <CSRFToken/>
-                <label>Username:</label>
-                <input
-                    type="text"
-                    value={username}
-                    onChange={onChange}
-                    name="username"
-                    required
-                />
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={onChange}
-                    name='password'
-                    required/>
-                <button type="submit" >Send</button>
+                <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                    <li className="nav-item" role="presentation">
+                        <h2>Login</h2>
+                    </li>
+                </ul>
+
+                <div className="tab-content">
+                    <div className="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                        <div className="form-outline mb-4">
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={onChange}
+                                name="username"
+                                required
+                                className={"form-control m-auto"}
+                            />
+                            <label className="form-label" htmlFor="loginName">Username</label>
+                        </div>
+
+                        <div className="form-outline mb-4">
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={onChange}
+                                name='password'
+                                className={"form-control"}
+                                required/>
+                            <label className="form-label" htmlFor="loginPassword">Password</label>
+                        </div>
+
+                        <div className="row mb-4">
+                            <div className="col-md-6 d-flex justify-content-center w-100">
+                                <a href="#">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                        <button type="submit" className="btn btn-primary btn-block mb-4 w-50">Sign in</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     );

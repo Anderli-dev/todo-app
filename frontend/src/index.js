@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 axios.defaults.withCredentials = true
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -10,7 +11,7 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <App/>
     </React.StrictMode>,
   document.getElementById('root')
 );

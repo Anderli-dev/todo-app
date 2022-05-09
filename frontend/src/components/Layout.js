@@ -6,7 +6,9 @@ export default () => {
   return (
     <React.Fragment>
       <NavBar />
-      <Outlet />
+        <div className={"container"}>
+            <Outlet />
+        </div>
     </React.Fragment>
   );
 };

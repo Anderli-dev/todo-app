@@ -1,5 +1,10 @@
 import React from "react";
 
 export const Home = () => (
-    <h1>Home</h1>
+    <div>
+        <p className="h1 text-center mt-3 mb-4 pb-3 dark">
+            <i className="fas fa-check-square me-1"></i>
+            <u>My Todo-s</u>
+        </p>
+    </div>
 );
