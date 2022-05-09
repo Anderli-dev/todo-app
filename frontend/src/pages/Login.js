@@ -43,7 +43,6 @@ export function Login(props) {
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
-            {res === 403 && (<h1>Wrong username or password</h1>)}
             <form onSubmit={loginSubmit} >
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
@@ -76,7 +75,7 @@ export function Login(props) {
                                 required/>
                             <label className="form-label" htmlFor="loginPassword">Password</label>
                         </div>
-
+                        {res === 403 && (<p className={"alert alert-danger"}>Wrong username or password</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">
                                 <a href="#">Forgot password?</a>
