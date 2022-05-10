@@ -20,7 +20,14 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-class TaskView(APIView):
+# TODO with tasks:
+#                 create: CreateAPIView
+#                 delete: DestroyAPIView
+#                 update: RetrieveUpdateAPIView
+#                 set is_done: to ListAPIView add update mixin
+
+
+class TaskView(ListAPIView, UpdateModelMixin):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
