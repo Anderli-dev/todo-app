@@ -10,6 +10,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 ReactDOM.render(
+    // TODO customize all project in material style
     <React.StrictMode>
         <App/>
     </React.StrictMode>,

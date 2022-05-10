@@ -12,6 +12,7 @@ from .serializer import *
 
 
 class UserView(APIView):
+    # TODO add user in NavBar
     queryset = CustomUser.objects.all()
 
     def get(self, request, *args, **kwargs):
