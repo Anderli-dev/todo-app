@@ -18,21 +18,21 @@ export function NavBar() {
                             <Nav.Link href={"/"}>Home</Nav.Link>
                             {isAuth
                                 ?(
-                                    <Fragment>
+                                    <>
                                         <Nav.Link href={"/detail"}>Detail</Nav.Link>
                                         <div className={" ms-auto"}>
                                             <Nav.Link as={"a"} href="" onClick={Logout}>Logout</Nav.Link>
                                         </div>
-                                    </Fragment>
+                                    </>
                                 )
                                 :(
-                                    <Fragment>
+                                    <>
                                         <div className={" ms-auto d-flex"}>
                                             <Nav.Link as={Link} to="/login" state={{ prevLocation: location.pathname}}>Login</Nav.Link>
                                             <p className={"nav-item m-0 p-2"}>or</p>
                                             <Nav.Link as={Link} to="/register" state={{ prevLocation: location.pathname}}>Register</Nav.Link>
                                         </div>
-                                    </Fragment>
+                                    </>
                                 )
                             }
                         </Nav>

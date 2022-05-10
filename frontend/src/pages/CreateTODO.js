@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate, useLocation} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 export function CreateTODO(props) {
     const [formData, setFormData] = useState({
@@ -11,7 +11,6 @@ export function CreateTODO(props) {
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
-    const location = useLocation()
 
     const { title, description } = formData;
 
@@ -36,8 +35,9 @@ export function CreateTODO(props) {
         }
     };
 
+
     if (res.status === 201) {
-        return <Navigate to={location.state.prevLocation} replace/>
+        return <Navigate to={"/"} replace/>
     }
 
     return (
