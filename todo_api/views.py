@@ -5,6 +5,8 @@ from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from rest_framework.mixins import UpdateModelMixin
 
 from .serializer import *
 
@@ -20,11 +22,23 @@ class UserView(APIView):
 
 class TaskView(APIView):
     queryset = Task.objects.all()
+    serializer_class = TaskSerializer
 
-    def get(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data)
+
+class TaskDetailView(RetrieveUpdateAPIView):
+    pass
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class TaskCreateView(CreateAPIView):
+    serializer_class = TaskSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(author_id=self.request.user)
+
+
+class TaskDeleteView(DestroyAPIView):
+    pass
 
 
 class Logout(APIView):

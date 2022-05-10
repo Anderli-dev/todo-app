@@ -8,24 +8,26 @@ import Layout from "./components/Layout";
 import {Logout} from "./actions/Logout";
 import Cookies from "js-cookie";
 import {Register} from "./pages/Register";
+import {CreateTODO} from "./pages/CreateTODO";
 
 function App() {
     const isAuth = Cookies.get("logged_in")
     const authLinks = (
         <Fragment>
-            <Route exact path="/" element={<Home/>}/>
-            <Route exact path="/detail" element={<Detail/>}/>
+            <Route replace path="/" element={<Home/>}/>
+            <Route replace path="/detail" element={<Detail/>}/>
+            <Route replace path="/task/create" element={<CreateTODO/>}/>
         </Fragment>);
-    const guestLinks = (<Route exact path="/" element={<Home/>}/>);
+    const guestLinks = (<Route replace path="/" element={<Home/>}/>);
     return (
         <Router>
             <Routes>
                 <Route element={ <Layout/> }>
                     {isAuth ? authLinks : guestLinks}
                 </Route>
-                <Route exact path="/login" element={<Login/>}/>
-                <Route exact path="/register" element={<Register/>}/>
-                <Route exact path="" element={<Logout/>}/>
+                <Route replace path="/login" element={<Login/>}/>
+                <Route replace path="/register" element={<Register/>}/>
+                <Route replace path="" element={<Logout/>}/>
             </Routes>
         </Router>
     );
