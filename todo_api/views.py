@@ -53,7 +53,39 @@ class LoginView(APIView):
             else:
                 return Response({"error": "Error Authentication"}, status=status.HTTP_403_FORBIDDEN)
         except():
-            return Response({"error": "Error in login"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Error in login"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class RegisterView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        data = self.request.data
+
+        username = data["username"]
+        password = data["password"]
+        re_password = data["re_password"]
+
+        try:
+            if password == re_password:
+                if CustomUser.objects.filter(username=username).exists():
+                    return Response({'error': 'Username already exists'}, status=status.HTTP_403_FORBIDDEN)
+                else:
+                    if len(password) < 6:
+                        return Response({'error': 'Password must be at least 6 characters'},
+                                        status=status.HTTP_403_FORBIDDEN)
+                    else:
+                        CustomUser.objects.create_user(username=username, password=password).save()
+                        user = authenticate(username=username, password=password)
+                        login(request, user)
+                        return Response({'success': 'User created successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Passwords do not match'}, status=status.HTTP_403_FORBIDDEN)
+        except():
+            return Response({'error': 'Something went wrong when registering account'}, status=status.HTTP_403_FORBIDDEN)
+
+    pass
 
 
 # use this just for dev

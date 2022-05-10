@@ -4,16 +4,17 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import {Navigate, useLocation} from "react-router-dom";
 
-export function Login(props) {
+export function Register(props) {
     const [formData, setFormData] = useState({
         username: "",
-        password: ""
+        password: "",
+        re_password: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
     const location = useLocation()
 
-    const { username, password } = formData;
+    const { username, password, re_password } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -24,9 +25,9 @@ export function Login(props) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         };
-        const body = {username: username, password: password}
+        const body = {username: username, password: password, re_password: re_password}
         try {
-            axios.post(`${process.env.REACT_APP_API_URL}/api/login/`, body,{
+            axios.post(`${process.env.REACT_APP_API_URL}/api/register/`, body,{
                     headers: headers,
                 })
                 .then(response => setResponse(response))
@@ -47,7 +48,7 @@ export function Login(props) {
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                     <li className="nav-item" role="presentation">
-                        <h2>Login</h2>
+                        <h2>Register</h2>
                     </li>
                 </ul>
 
@@ -59,9 +60,8 @@ export function Login(props) {
                                 value={username}
                                 onChange={onChange}
                                 name="username"
-                                required
                                 className={"form-control m-auto"}
-                            />
+                                required/>
                             <label className="form-label" htmlFor="loginName">Username</label>
                         </div>
 
@@ -75,18 +75,25 @@ export function Login(props) {
                                 required/>
                             <label className="form-label" htmlFor="loginPassword">Password</label>
                         </div>
+
+                        <div className="form-outline mb-4">
+                            <input
+                                type="password"
+                                value={re_password}
+                                onChange={onChange}
+                                name='re_password'
+                                className={"form-control"}
+                                required/>
+                            <label className="form-label" htmlFor="login_rePassword">Repeat password</label>
+                        </div>
                         {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">
-                                <a href="#">Forgot password?</a>
+                                <a href="/login">Sing up?</a>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary btn-block mb-4 w-50">Sign in</button>
-                        </div>
-
-                        <div className="text-center">
-                            <p>Not a member? <a href="/register">Register</a></p>
+                        <button type="submit" className="btn btn-primary btn-block mb-4 w-50">Register</button>
                         </div>
                     </div>
                 </div>
