@@ -3,6 +3,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,6 +12,7 @@ from .serializer import *
 
 
 class UserView(APIView):
+    # TODO add user in NavBar
     queryset = CustomUser.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -18,13 +21,32 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-class TaskView(APIView):
-    queryset = Task.objects.all()
+# TODO with tasks:
+#                 create: CreateAPIView
+#                 delete: DestroyAPIView
+#                 update: RetrieveUpdateAPIView
+#                 set is_done: to ListAPIView add update mixin
 
-    def get(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data)
+
+class TaskView(ListAPIView, UpdateModelMixin):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+
+class TaskDetailView(RetrieveUpdateAPIView):
+    pass
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class TaskCreateView(CreateAPIView):
+    serializer_class = TaskSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(author_id=self.request.user)
+
+
+class TaskDeleteView(DestroyAPIView):
+    pass
 
 
 class Logout(APIView):
@@ -53,7 +75,39 @@ class LoginView(APIView):
             else:
                 return Response({"error": "Error Authentication"}, status=status.HTTP_403_FORBIDDEN)
         except():
-            return Response({"error": "Error in login"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Error in login"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class RegisterView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        data = self.request.data
+
+        username = data["username"]
+        password = data["password"]
+        re_password = data["re_password"]
+
+        try:
+            if password == re_password:
+                if CustomUser.objects.filter(username=username).exists():
+                    return Response({'error': 'Username already exists'}, status=status.HTTP_403_FORBIDDEN)
+                else:
+                    if len(password) < 6:
+                        return Response({'error': 'Password must be at least 6 characters'},
+                                        status=status.HTTP_403_FORBIDDEN)
+                    else:
+                        CustomUser.objects.create_user(username=username, password=password).save()
+                        user = authenticate(username=username, password=password)
+                        login(request, user)
+                        return Response({'success': 'User created successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Passwords do not match'}, status=status.HTTP_403_FORBIDDEN)
+        except():
+            return Response({'error': 'Something went wrong when registering account'}, status=status.HTTP_403_FORBIDDEN)
+
+    pass
 
 
 # use this just for dev

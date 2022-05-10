@@ -20,6 +20,7 @@ class Task(models.Model):
     title = models.CharField(max_length=255, unique=False)
     description = models.TextField("Task text")
     created_at = models.DateTimeField(auto_now_add=True)
+    is_done = models.BooleanField(default=False)
 
     author_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 

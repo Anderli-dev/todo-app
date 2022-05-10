@@ -4,29 +4,30 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import {Navigate, useLocation} from "react-router-dom";
 
-export function Login(props) {
+export function Register(props) {
     const [formData, setFormData] = useState({
         username: "",
-        password: ""
+        password: "",
+        re_password: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
     const location = useLocation()
 
-    const { username, password } = formData;
+    const { username, password, re_password } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const loginSubmit = e => {
+    const regSubmit = e => {
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         };
-        const body = {username: username, password: password}
+        const body = {username: username, password: password, re_password: re_password}
         try {
-            axios.post(`${process.env.REACT_APP_API_URL}/api/login/`, body,{
+            axios.post(`${process.env.REACT_APP_API_URL}/api/register/`, body,{
                     headers: headers,
                 })
                 .then(response => setResponse(response))
@@ -43,11 +44,11 @@ export function Login(props) {
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
-            <form onSubmit={loginSubmit} className={"w-25"}>
+            <form onSubmit={regSubmit} className={"w-25"}>
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                     <li className="nav-item" role="presentation">
-                        <h2>Login</h2>
+                        <h2>Register</h2>
                     </li>
                 </ul>
 
@@ -73,29 +74,31 @@ export function Login(props) {
                                 className={"form-control"}
                                 placeholder="Password"
                                 required/>
+                            {/*TODO*/}
+                            {/*<small id="passwordHelpBlock" className="form-text text-muted">*/}
+                            {/*    Your password must be 6 characters long, contain letters and numbers, and must not*/}
+                            {/*    contain spaces, special characters, or emoji.*/}
+                            {/*</small>*/}
                         </div>
-                        {res.status === 403 &&
-                            // TODO and in register to
-                            // <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-                            //     <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                            //     <p>
-                            //         Change this and that and try again. Duis mollis, est non commodo
-                            //         luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                            //         Cras mattis consectetur purus sit amet fermentum.
-                            //     </p>
-                            // </Alert>
-                            (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
+
+                        <div className="form-outline mb-4">
+                            <input
+                                type="password"
+                                value={re_password}
+                                onChange={onChange}
+                                name='re_password'
+                                className={"form-control"}
+                                placeholder="Repeat password"
+                                required/>
+                        </div>
+                        {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">
-                                <a href="#">Forgot password?</a>
+                                <a href="/login">Sing up?</a>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary btn-block mb-4 w-50">Sign in</button>
-                        </div>
-
-                        <div className="text-center">
-                            <p>Not a member? <a href="/register">Register</a></p>
+                        <button type="submit" className="btn btn-primary btn-block mb-4 w-50">Register</button>
                         </div>
                     </div>
                 </div>
