@@ -59,10 +59,9 @@ export function Login(props) {
                                 value={username}
                                 onChange={onChange}
                                 name="username"
-                                required
                                 className={"form-control m-auto"}
-                            />
-                            <label className="form-label" htmlFor="loginName">Username</label>
+                                placeholder="Username"
+                                required/>
                         </div>
 
                         <div className="form-outline mb-4">
@@ -72,8 +71,8 @@ export function Login(props) {
                                 onChange={onChange}
                                 name='password'
                                 className={"form-control"}
+                                placeholder="Password"
                                 required/>
-                            <label className="form-label" htmlFor="loginPassword">Password</label>
                         </div>
                         {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">

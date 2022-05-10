@@ -18,7 +18,7 @@ export function Register(props) {
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const loginSubmit = e => {
+    const regSubmit = e => {
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -44,7 +44,7 @@ export function Register(props) {
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
-            <form onSubmit={loginSubmit} className={"w-25"}>
+            <form onSubmit={regSubmit} className={"w-25"}>
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                     <li className="nav-item" role="presentation">
@@ -61,8 +61,8 @@ export function Register(props) {
                                 onChange={onChange}
                                 name="username"
                                 className={"form-control m-auto"}
+                                placeholder="Username"
                                 required/>
-                            <label className="form-label" htmlFor="loginName">Username</label>
                         </div>
 
                         <div className="form-outline mb-4">
@@ -72,8 +72,13 @@ export function Register(props) {
                                 onChange={onChange}
                                 name='password'
                                 className={"form-control"}
+                                placeholder="Password"
                                 required/>
-                            <label className="form-label" htmlFor="loginPassword">Password</label>
+                            {/*TODO*/}
+                            {/*<small id="passwordHelpBlock" className="form-text text-muted">*/}
+                            {/*    Your password must be 6 characters long, contain letters and numbers, and must not*/}
+                            {/*    contain spaces, special characters, or emoji.*/}
+                            {/*</small>*/}
                         </div>
 
                         <div className="form-outline mb-4">
@@ -83,8 +88,8 @@ export function Register(props) {
                                 onChange={onChange}
                                 name='re_password'
                                 className={"form-control"}
+                                placeholder="Repeat password"
                                 required/>
-                            <label className="form-label" htmlFor="login_rePassword">Repeat password</label>
                         </div>
                         {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
