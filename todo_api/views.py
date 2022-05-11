@@ -29,8 +29,12 @@ class UserView(APIView):
 
 
 class TaskView(ListAPIView, UpdateModelMixin):
-    queryset = Task.objects.all()
+    # add is_auth
     serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        queryset = Task.objects.filter(author_id=self.request.user.id)
+        return queryset
 
 
 class TaskDetailView(RetrieveUpdateAPIView):

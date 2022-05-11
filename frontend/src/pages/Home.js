@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, Table} from "react-bootstrap";
-import { Scrollbars } from 'react-custom-scrollbars';
+import {Scrollbars} from 'react-custom-scrollbars';
 import axios from "axios";
-import {Link} from "react-router-dom";
 import Cookies from "js-cookie";
 
 export function Home(){
@@ -36,7 +35,7 @@ export function Home(){
                         <h2 className="text-muted mt-5 text-center">You dont have todo-s yet...</h2>
                         <h1 className="text-muted text-center ">:(</h1>
                     </div>
-                    <div className="text-center mt-auto mt-5"><Link to="/task/create" >Clik hear to create one</Link></div>
+                    <div className="text-center mt-auto mt-5"><a href={"/task/create"} >Clik hear to create one</a></div>
                 </div>
             </>
         )

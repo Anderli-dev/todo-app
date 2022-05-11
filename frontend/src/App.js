@@ -13,11 +13,11 @@ import {CreateTODO} from "./pages/CreateTODO";
 function App() {
     const isAuth = Cookies.get("logged_in")
     const authLinks = (
-        <Fragment>
+        <>
             <Route replace path="/" element={<Home/>}/>
             <Route replace path="/detail" element={<Detail/>}/>
             <Route replace path="/task/create" element={<CreateTODO/>}/>
-        </Fragment>);
+        </>);
     const guestLinks = (<Route replace path="/" element={<Home/>}/>);
     return (
         <Router>
