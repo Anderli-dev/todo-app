@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import permissions
 from rest_framework import status
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, get_object_or_404
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -37,8 +37,13 @@ class TaskView(ListAPIView, UpdateModelMixin):
         return queryset
 
 
+@method_decorator(csrf_protect, name="dispatch")
 class TaskDetailView(RetrieveUpdateAPIView):
-    pass
+    serializer_class = TaskSerializer
+
+    def get_object(self):
+        id = self.kwargs["id"]
+        return get_object_or_404(Task, author_id=self.request.user, id=id)
 
 
 @method_decorator(csrf_protect, name="dispatch")

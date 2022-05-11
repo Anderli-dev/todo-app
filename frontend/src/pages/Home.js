@@ -59,7 +59,7 @@ export function Home(){
                               <tbody>
                               {res.data.map((item) => (
                                   <tr key = { item.id }>
-                                      <td>{item.title}</td>
+                                      <td><a className="text-decoration-none text-white" href={`/task/${item.id}`}>{item.title}</a></td>
                                       <td className="w-25">Del btn, Change btn</td>
                                   </tr>
                               ))
