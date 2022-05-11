@@ -22,9 +22,6 @@ class UserView(APIView):
 
 
 # TODO with tasks:
-#                 create: CreateAPIView
-#                 delete: DestroyAPIView
-#                 update: RetrieveUpdateAPIView
 #                 set is_done: to ListAPIView add update mixin
 
 
@@ -55,7 +52,11 @@ class TaskCreateView(CreateAPIView):
 
 
 class TaskDeleteView(DestroyAPIView):
-    pass
+    serializer_class = TaskSerializer
+
+    def get_object(self):
+        id = self.kwargs["id"]
+        return get_object_or_404(Task, author_id=self.request.user, id=id)
 
 
 class Logout(APIView):

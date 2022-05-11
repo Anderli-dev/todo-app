@@ -5,7 +5,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export function Home(){
-    let [res, setResponse] = useState({});
+    let [tasks, setTasks] = useState([]);
     const isAuth = Cookies.get("logged_in")
 
     function getTasks(){
@@ -16,11 +16,42 @@ export function Home(){
         try {
             axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
                 headers: headers,})
-                .then(response => setResponse(response))
-                .catch(error => setResponse(error.response))
+                .then(response => setTasks(response.data))
+                .catch(error => setTasks(error.response))
         } catch (err) {
             console.log(err)
         }
+    }
+
+    function delTask(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        try {
+            axios.delete(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/delete`, {
+                headers: headers,})
+                .catch(error => setTasks(error.response))
+        } catch (err) {
+            console.log(err)
+        }
+
+        let index = 0;
+        for(index; index<tasks.length; index++) {
+            if (tasks[index].id === id) {
+                break;
+            }
+        }
+        const newList=[];
+        for(let i=0; i < tasks.length; i++){
+            if(i !== index) {
+                newList.push(tasks[i])
+            }
+        }
+
+        setTasks(newList);
+
+        console.log(tasks)
     }
 
     useEffect(() => {
@@ -57,10 +88,13 @@ export function Home(){
                       <Scrollbars style={{ width: "100%", height: "47vh"}}>
                           <Table striped bordered hover variant="dark">
                               <tbody>
-                              {res.data.map((item) => (
+                              {tasks.map((item) => (
                                   <tr key = { item.id }>
                                       <td><a className="text-decoration-none text-white" href={`/task/${item.id}`}>{item.title}</a></td>
-                                      <td className="w-25">Del btn, Change btn</td>
+                                      <td className="w-25">
+                                          <Button className="me-2" onClick={()=>delTask(item.id)}>Del btn</Button>
+                                          <Button href={`/task/${item.id}`}>Change btn</Button>
+                                      </td>
                                   </tr>
                               ))
                               }
@@ -86,7 +120,7 @@ export function Home(){
 
               {res.data !== undefined
                   ?   <>
-                      {res.data.length === 0
+                      {tasks.length === 0
                           ? notHaveTodoMsg()
                           : todoList()
                       }
