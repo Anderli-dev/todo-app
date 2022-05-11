@@ -7,16 +7,17 @@ import {Navigate, useParams} from "react-router-dom";
 export function Todo(props) {
     const [formData, setFormData] = useState({
         title: "",
-        description: ""
+        description: "",
+        is_done: null
     });
     const {id} = useParams();
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
 
 
-    const { title, description } = formData;
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
+    const { title, description, is_done } = formData;
+    const onChange = e => setFormData({ ...formData,
+        [e.target.name]: e.target.type === 'checkbox'? e.target.checked : e.target.value });
 
     useEffect(() => {
         const headers = {
@@ -30,7 +31,8 @@ export function Todo(props) {
                 })
                 .then(response => {setResponse(response);
                     setFormData({ ...formData, ["title"]: response.data["title"],
-                                                    ["description"]: response.data["description"]
+                                                    ["description"]: response.data["description"],
+                                                    ["is_done"]: response.data["is_done"]
                     });
                 })
                 .catch(error => setResponse(error.response))
@@ -47,7 +49,7 @@ export function Todo(props) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         };
-        const body = {title: title, description: description}
+        const body = {title: title, description: description, is_done: is_done}
         try {
             axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id, body,{
                     headers: headers,
@@ -74,7 +76,7 @@ export function Todo(props) {
                         className={"form-control m-auto"}
                         required/>
                 </div>
-                <div className="form-outline mb-4">
+                <div className="form-outline mb-2">
                     <label className="form-label" htmlFor="loginName">Description</label>
                     <textarea
                         value={description}
@@ -85,7 +87,16 @@ export function Todo(props) {
                         rows="10"
                         required></textarea>
                 </div>
-
+                <div className="form-check">
+                    <label className="form-check-label mb-2" htmlFor="flexCheckDefault">Done</label>
+                    <input className="form-check-input"
+                           onChange={onChange}
+                           name="is_done"
+                           type="checkbox"
+                           id="flexCheckDefault"
+                           checked={is_done}
+                           />
+                </div>
                 <div className="d-flex justify-content-start">
                     <button type="submit" className="btn btn-primary btn-block mb-4 w-25">Save</button>
                 </div>

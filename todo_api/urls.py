@@ -9,7 +9,8 @@ from .views import (LoginView,
                     RegisterView,
                     TaskCreateView,
                     TaskDetailView,
-                    TaskDeleteView,)
+                    TaskDeleteView,
+                    TaskDoneView,)
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('tasks/', TaskView.as_view(), name='tasks'),
     path('task/<int:id>', TaskDetailView.as_view(), name='task'),
     path('task/<int:id>/delete', TaskDeleteView.as_view(), name='task_delete'),
+    path('task/<int:id>/done', TaskDoneView.as_view(), name='task_done'),
     path('task/create/', TaskCreateView.as_view(), name='create_task'),
     path('register/', RegisterView.as_view(), name='register'),
     path('csrf_cookie/', GetCSRFToken.as_view()),

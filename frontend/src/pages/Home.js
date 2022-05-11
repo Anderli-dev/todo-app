@@ -50,8 +50,41 @@ export function Home(){
         }
 
         setTasks(newList);
+    }
 
-        console.log(tasks)
+    function doneTask(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        try {
+            axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/done`, {
+                headers: headers,})
+                .catch(error => setTasks(error.response))
+        } catch (err) {
+            console.log(err)
+        }
+
+        let index = 0;
+        for(index; index<tasks.length; index++) {
+            if (tasks[index].id === id) {
+                break;
+            }
+        }
+
+        const newList=[];
+        for(let i=0; i < tasks.length; i++){
+            if(i !== index) {
+                newList.push(tasks[i])
+            }
+            else {
+                tasks[i].is_done = true
+                newList.push(tasks[i])
+            }
+        }
+
+        setTasks(newList);
+
     }
 
     useEffect(() => {
@@ -90,10 +123,12 @@ export function Home(){
                               <tbody>
                               {tasks.map((item) => (
                                   <tr key = { item.id }>
-                                      <td><a className="text-decoration-none text-white" href={`/task/${item.id}`}>{item.title}</a></td>
+                                      <td><a href={`/task/${item.id}`}
+                                             className={item.is_done?"text-decoration-line-through text-white"
+                                                                    :"text-decoration-none text-white"}>{item.title}</a></td>
                                       <td className="w-25">
                                           <Button className="me-2" onClick={()=>delTask(item.id)}>Del btn</Button>
-                                          <Button href={`/task/${item.id}`}>Change btn</Button>
+                                          {item.is_done?<></>:<Button onClick={()=>doneTask(item.id)}>Done btn</Button>}
                                       </td>
                                   </tr>
                               ))
@@ -117,8 +152,8 @@ export function Home(){
                   <i className="fas fa-check-square me-1"></i>
                   <u>My Todo-s</u>
               </div>
-
-              {res.data !== undefined
+              {/*TODO fix hear*/}
+              {tasks !== undefined
                   ?   <>
                       {tasks.length === 0
                           ? notHaveTodoMsg()

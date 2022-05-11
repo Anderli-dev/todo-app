@@ -3,8 +3,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import permissions
 from rest_framework import status
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView, get_object_or_404
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.generics import (ListAPIView,
+                                     CreateAPIView,
+                                     RetrieveUpdateAPIView,
+                                     DestroyAPIView,
+                                     UpdateAPIView,
+                                     get_object_or_404)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -25,7 +29,7 @@ class UserView(APIView):
 #                 set is_done: to ListAPIView add update mixin
 
 
-class TaskView(ListAPIView, UpdateModelMixin):
+class TaskView(ListAPIView):
     # add is_auth
     serializer_class = TaskSerializer
 
@@ -57,6 +61,17 @@ class TaskDeleteView(DestroyAPIView):
     def get_object(self):
         id = self.kwargs["id"]
         return get_object_or_404(Task, author_id=self.request.user, id=id)
+
+
+class TaskDoneView(UpdateAPIView):
+    serializer_class = TaskSerializer
+
+    def update(self, request, *args, **kwargs):
+        id = self.kwargs["id"]
+        task = Task.objects.filter(author_id=self.request.user, id=id)
+        task.update(is_done=True)
+
+        return Response({"msg": "Task is done"}, status=status.HTTP_200_OK)
 
 
 class Logout(APIView):
