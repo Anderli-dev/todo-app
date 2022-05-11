@@ -1,5 +1,5 @@
-import React, {Fragment} from "react";
-import {Link, NavLink, useLocation} from "react-router-dom";
+import React from "react";
+import {Link, useLocation} from "react-router-dom";
 import {Logout} from "../actions/Logout";
 import Cookies from "js-cookie";
 import {Container, Nav, Navbar} from "react-bootstrap";
@@ -15,11 +15,9 @@ export function NavBar() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className={"flex-grow-0 d-flex w-100"}>
                         <Nav className={"w-100"}>
-                            <Nav.Link href={"/"}>Home</Nav.Link>
                             {isAuth
                                 ?(
                                     <>
-                                        <Nav.Link href={"/detail"}>Detail</Nav.Link>
                                         <div className={" ms-auto"}>
                                             <Nav.Link as={"a"} href="" onClick={Logout}>Logout</Nav.Link>
                                         </div>
