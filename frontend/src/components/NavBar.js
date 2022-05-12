@@ -19,7 +19,7 @@ export function NavBar() {
                                 ?(
                                     <>
                                         <div className={" ms-auto"}>
-                                            <Nav.Link as={"a"} href="" onClick={Logout}>Logout</Nav.Link>
+                                            <Nav.Link as={"a"} href="/" onClick={Logout}>Logout</Nav.Link>
                                         </div>
                                     </>
                                 )

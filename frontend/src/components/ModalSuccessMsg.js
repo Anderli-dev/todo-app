@@ -24,7 +24,7 @@ export class SuccessModal extends React.Component{
                        backdrop={false}
                        enforceFocus={false}>
                     <ModalHeader className="alert alert-success border-bottom-0 m-0" role="alert">
-                        <p className="text-black m-0">Success!Changes saved</p>
+                        <p className="text-black m-0">{this.props.text}</p>
                     </ModalHeader>
                 </Modal>
             </>

@@ -69,14 +69,14 @@ export function Todo(props) {
         navigate("/")
     }
 
-    const onShow = () => {
+    const showSuccessMsg = () => {
         setTimeout(()=>{setIsSave(false)}, 2150)
-        return <SuccessModal/>
+        return <SuccessModal text={"Success!Changes saved"}/>
     }
 
     return (
         <div className="d-flex justify-content-center vh-100 align-items-center">
-            {isSave && onShow()}
+            {isSave && showSuccessMsg()}
             <form onSubmit={taskSubmit} className="w-75">
                 <CSRFToken/>
                 <div className="form-outline mb-4 w-25">

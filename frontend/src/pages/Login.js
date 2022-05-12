@@ -38,7 +38,7 @@ export function Login(props) {
 
     if (res.status === 200) {
         Cookies.set("logged_in", "yes")
-        return <Navigate to={location.state.prevLocation} replace/>
+        return <Navigate to={"/"} replace/>
     }
 
     return (
