@@ -63,6 +63,9 @@ export function Register(props) {
                                 className={"form-control m-auto"}
                                 placeholder="Username"
                                 required/>
+                            <small id="passwordHelpBlock" className="form-text text-muted">
+                                Come up something interesting.
+                            </small>
                         </div>
 
                         <div className="form-outline mb-4">
@@ -74,11 +77,9 @@ export function Register(props) {
                                 className={"form-control"}
                                 placeholder="Password"
                                 required/>
-                            {/*TODO*/}
-                            {/*<small id="passwordHelpBlock" className="form-text text-muted">*/}
-                            {/*    Your password must be 6 characters long, contain letters and numbers, and must not*/}
-                            {/*    contain spaces, special characters, or emoji.*/}
-                            {/*</small>*/}
+                            <small id="passwordHelpBlock" className="form-text text-muted">
+                                Your password must be 6 characters long.
+                            </small>
                         </div>
 
                         <div className="form-outline mb-4">

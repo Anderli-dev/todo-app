@@ -15,18 +15,7 @@ from rest_framework.views import APIView
 from .serializer import *
 
 
-class UserView(APIView):
-    # TODO add user in NavBar
-    queryset = CustomUser.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        users = CustomUser.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
-
-
 class TaskView(ListAPIView):
-    # add is_auth
     serializer_class = TaskSerializer
 
     def get_queryset(self):
@@ -94,7 +83,7 @@ class LoginView(APIView):
                 login(request, user)
                 return Response({"status": "Success"}, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "Error Authentication"}, status=status.HTTP_403_FORBIDDEN)
+                return Response({"error": "Wrong password or login!"}, status=status.HTTP_403_FORBIDDEN)
         except():
             return Response({"error": "Error in login"}, status=status.HTTP_400_BAD_REQUEST)
 
