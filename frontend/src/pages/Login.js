@@ -38,11 +38,11 @@ export function Login(props) {
 
     if (res.status === 200) {
         Cookies.set("logged_in", "yes")
-        return <Navigate to={location.state.prevLocation} replace/>
+        return <Navigate to={"/"} replace/>
     }
 
     return (
-        <div className={"d-flex justify-content-center vh-100 align-items-center"}>
+        <div className="d-flex justify-content-center vh-100 align-items-center">
             <form onSubmit={loginSubmit} className={"w-25"}>
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
@@ -74,17 +74,7 @@ export function Login(props) {
                                 placeholder="Password"
                                 required/>
                         </div>
-                        {res.status === 403 &&
-                            // TODO and in register to
-                            // <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-                            //     <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                            //     <p>
-                            //         Change this and that and try again. Duis mollis, est non commodo
-                            //         luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                            //         Cras mattis consectetur purus sit amet fermentum.
-                            //     </p>
-                            // </Alert>
-                            (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
+                        {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">
                                 <a href="#">Forgot password?</a>

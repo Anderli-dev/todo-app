@@ -35,7 +35,6 @@ export function CreateTODO(props) {
         }
     };
 
-
     if (res.status === 201) {
         return <Navigate to={"/"} replace/>
     }

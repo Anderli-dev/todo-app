@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 import {Home} from "./pages/Home";
@@ -11,6 +11,7 @@ import {CreateTODO} from "./pages/CreateTODO";
 import {Todo} from "./pages/Todo";
 
 function App() {
+    document.body.style.overflow = 'overlay';
     const isAuth = Cookies.get("logged_in")
     const authLinks = (
         <>

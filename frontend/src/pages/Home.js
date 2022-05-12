@@ -3,6 +3,7 @@ import {Button, Table} from "react-bootstrap";
 import {Scrollbars} from 'react-custom-scrollbars';
 import axios from "axios";
 import Cookies from "js-cookie";
+import {DeleteTask} from "../actions/DeleteTask";
 
 export function Home(){
     let [tasks, setTasks] = useState([]);
@@ -24,17 +25,7 @@ export function Home(){
     }
 
     function delTask(id){
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        try {
-            axios.delete(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/delete`, {
-                headers: headers,})
-                .catch(error => setTasks(error.response))
-        } catch (err) {
-            console.log(err)
-        }
+        DeleteTask(id)
 
         let index = 0;
         for(index; index<tasks.length; index++) {

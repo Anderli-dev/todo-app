@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import {useNavigate} from "react-router-dom";
 
 export function Logout () {
     Cookies.remove("logged_in")

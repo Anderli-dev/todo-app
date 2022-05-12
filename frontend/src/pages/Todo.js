@@ -2,7 +2,9 @@ import React, {useEffect, useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {DeleteTask} from "../actions/DeleteTask";
+import {SuccessModal} from "../components/ModalSuccessMsg";
 
 export function Todo(props) {
     const [formData, setFormData] = useState({
@@ -10,10 +12,12 @@ export function Todo(props) {
         description: "",
         is_done: null
     });
-    const {id} = useParams();
     const [csrftoken] = useState(Cookies.get("csrftoken"));
-    let [res, setResponse] = useState({});
+    let [res, setResponse] = useState([]);
+    const [isSave, setIsSave] = useState(false);
 
+    const {id} = useParams();
+    const navigate = useNavigate()
 
     const { title, description, is_done } = formData;
     const onChange = e => setFormData({ ...formData,
@@ -29,11 +33,9 @@ export function Todo(props) {
             axios.get(`${process.env.REACT_APP_API_URL}/api/task/`+ id,{
                     headers: headers,
                 })
-                .then(response => {setResponse(response);
-                    setFormData({ ...formData, ["title"]: response.data["title"],
+                .then(response => {setFormData({ ...formData, ["title"]: response.data["title"],
                                                     ["description"]: response.data["description"],
-                                                    ["is_done"]: response.data["is_done"]
-                    });
+                                                    ["is_done"]: response.data["is_done"]});
                 })
                 .catch(error => setResponse(error.response))
         }
@@ -42,7 +44,7 @@ export function Todo(props) {
         }
     }, []);
 
-    const todoSubmit = e => {
+    const taskSubmit = e => {
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -59,12 +61,23 @@ export function Todo(props) {
         } catch (err) {
             console.log(err)
         }
+        setIsSave(true)
     };
 
+    function delTask(id){
+        DeleteTask(id)
+        navigate("/")
+    }
+
+    const showSuccessMsg = () => {
+        setTimeout(()=>{setIsSave(false)}, 2150)
+        return <SuccessModal text={"Success!Changes saved"}/>
+    }
+
     return (
-        // TODO add success msg after update
-        <div className={"d-flex justify-content-center vh-100 align-items-center"}>
-            <form onSubmit={todoSubmit} className={"w-75"}>
+        <div className="d-flex justify-content-center vh-100 align-items-center">
+            {isSave && showSuccessMsg()}
+            <form onSubmit={taskSubmit} className="w-75">
                 <CSRFToken/>
                 <div className="form-outline mb-4 w-25">
                     <label className="form-label" htmlFor="loginName">Title</label>
@@ -95,10 +108,11 @@ export function Todo(props) {
                            type="checkbox"
                            id="flexCheckDefault"
                            checked={is_done}
-                           />
+                    />
                 </div>
-                <div className="d-flex justify-content-start">
-                    <button type="submit" className="btn btn-primary btn-block mb-4 w-25">Save</button>
+                <div className="d-flex justify-content-between">
+                    <button type="submit" className="btn btn-primary btn-block mb-4 w-25" >Save</button>
+                    <button type="submit" className="btn btn-danger btn-block mb-4" onClick={()=>delTask(id)}>Delete</button>
                 </div>
             </form>
         </div>
