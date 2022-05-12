@@ -11,6 +11,7 @@ import {CreateTODO} from "./pages/CreateTODO";
 import {Todo} from "./pages/Todo";
 
 function App() {
+    document.body.style.overflow = 'overlay';
     const isAuth = Cookies.get("logged_in")
     const authLinks = (
         <>

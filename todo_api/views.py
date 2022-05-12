@@ -25,10 +25,6 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-# TODO with tasks:
-#                 set is_done: to ListAPIView add update mixin
-
-
 class TaskView(ListAPIView):
     # add is_auth
     serializer_class = TaskSerializer

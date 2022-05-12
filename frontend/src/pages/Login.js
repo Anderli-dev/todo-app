@@ -42,7 +42,7 @@ export function Login(props) {
     }
 
     return (
-        <div className={"d-flex justify-content-center vh-100 align-items-center"}>
+        <div className="d-flex justify-content-center vh-100 align-items-center">
             <form onSubmit={loginSubmit} className={"w-25"}>
                 <CSRFToken/>
                 <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
