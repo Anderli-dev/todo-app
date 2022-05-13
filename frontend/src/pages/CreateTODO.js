@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
+import {SuccessModal} from "../components/ModalSuccessMsg";
 
 export function CreateTODO(props) {
     const [formData, setFormData] = useState({
@@ -10,11 +11,18 @@ export function CreateTODO(props) {
         description: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
-    let [res, setResponse] = useState({});
+    const [isSave, setIsSave] = useState(false);
+
+    const navigate = useNavigate()
 
     const { title, description } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+        const showSuccessMsg = () => {
+        setTimeout(()=>{setIsSave(false)}, 2150)
+        return <SuccessModal text={"Success!Changes saved"}/>
+    }
 
     const loginSubmit = e => {
         e.preventDefault()
@@ -28,19 +36,18 @@ export function CreateTODO(props) {
             axios.post(`${process.env.REACT_APP_API_URL}/api/task/create/`, body,{
                     headers: headers,
                 })
-                .then(response => setResponse(response))
-                .catch(error => setResponse(error.response))
+                .catch(error => console.log(error))
         } catch (err) {
             console.log(err)
         }
-    };
 
-    if (res.status === 201) {
-        return <Navigate to={"/"} replace/>
-    }
+        navigate("/", {replace:true})
+        setIsSave(true)
+    };
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
+             {isSave && showSuccessMsg()}
             <form onSubmit={loginSubmit} className={"w-75"}>
                 <CSRFToken/>
                 <div className="form-outline mb-4 w-25">

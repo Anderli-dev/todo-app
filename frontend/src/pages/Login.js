@@ -2,19 +2,17 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate, useLocation} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
-export function Login(props) {
+export function Login() {
     const [formData, setFormData] = useState({
         username: "",
         password: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
-    const location = useLocation()
 
     const { username, password } = formData;
-
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const loginSubmit = e => {
@@ -34,10 +32,12 @@ export function Login(props) {
         } catch (err) {
             console.log(err)
         }
+
+        Cookies.set("logged_in", "yes")
     };
 
     if (res.status === 200) {
-        Cookies.set("logged_in", "yes")
+        localStorage.setItem('user', username);
         return <Navigate to={"/"} replace/>
     }
 

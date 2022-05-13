@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {Logout} from "../actions/Logout";
 import Cookies from "js-cookie";
@@ -7,6 +7,7 @@ import {Container, Nav, Navbar} from "react-bootstrap";
 export function NavBar() {
     const isAuth = Cookies.get("logged_in")
     const location = useLocation()
+    const [username] = useState(localStorage.getItem('user'))
     return (
         <>
             <Navbar variant="dark" style={{ backgroundColor: "#2c3237"}} >
@@ -18,7 +19,8 @@ export function NavBar() {
                             {isAuth
                                 ?(
                                     <>
-                                        <div className={" ms-auto"}>
+                                        <div className={"d-flex ms-auto"}>
+                                            <p className="m-0 p-2">Hi,{username}!</p>
                                             <Nav.Link as={"a"} href="/" onClick={Logout}>Logout</Nav.Link>
                                         </div>
                                     </>
