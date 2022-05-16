@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import {Register} from "./pages/Register";
 import {CreateTODO} from "./pages/CreateTODO";
 import {Todo} from "./pages/Todo";
+import {PageNotFound} from "./pages/404";
 
 function App() {
     document.body.style.overflow = 'overlay';
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="" element={<Logout/>}/>
+                <Route path="*" element={<PageNotFound/>}/>
             </Routes>
         </Router>
     );
