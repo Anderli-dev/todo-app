@@ -5,8 +5,10 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import {DeleteTask} from "../actions/DeleteTask";
 import {SuccessModal} from "../components/ModalSuccessMsg";
+import {CreateWhiteIco} from "../actions/CreateWhiteIco";
+import {MdSave} from "react-icons/md"
 
-export function Todo(props) {
+export function Todo() {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -103,6 +105,7 @@ export function Todo(props) {
                 <div className="form-check">
                     <label className="form-check-label mb-2" htmlFor="flexCheckDefault">Done</label>
                     <input className="form-check-input"
+                           value=""
                            onChange={onChange}
                            name="is_done"
                            type="checkbox"
@@ -111,7 +114,9 @@ export function Todo(props) {
                     />
                 </div>
                 <div className="d-flex justify-content-between">
-                    <button type="submit" className="btn btn-primary btn-block mb-4 w-25" >Save</button>
+                    <button type="submit" className="d-flex text-center justify-content-center btn btn-primary btn-block mb-4 w-25" >
+                        Save <div className="ms-1">{CreateWhiteIco(<MdSave/>)}</div>
+                    </button>
                     <button type="submit" className="btn btn-danger btn-block mb-4" onClick={()=>delTask(id)}>Delete</button>
                 </div>
             </form>

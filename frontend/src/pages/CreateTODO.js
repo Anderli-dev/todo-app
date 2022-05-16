@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import {Navigate, useNavigate} from "react-router-dom";
 import {SuccessModal} from "../components/ModalSuccessMsg";
+import {CreateWhiteIco} from "../actions/CreateWhiteIco";
+import {MdAddCircleOutline} from "react-icons/md";
 
 export function CreateTODO(props) {
     const [formData, setFormData] = useState({
@@ -73,7 +75,10 @@ export function CreateTODO(props) {
                 </div>
 
                 <div className="d-flex justify-content-start">
-                    <button type="submit" className="btn btn-primary btn-block mb-4 w-25">Add</button>
+                    <button type="submit" className="d-flex justify-content-center btn btn-primary btn-block mb-4 w-25">
+                        Add
+                        <div className="ms-1">{CreateWhiteIco(<MdAddCircleOutline/>)}</div>
+                    </button>
                 </div>
             </form>
         </div>

@@ -4,6 +4,8 @@ import {Scrollbars} from 'react-custom-scrollbars';
 import axios from "axios";
 import Cookies from "js-cookie";
 import {DeleteTask} from "../actions/DeleteTask";
+import {CreateWhiteIco} from "../actions/CreateWhiteIco";
+import {MdDeleteForever, MdEdit, MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank} from "react-icons/md";
 
 export function Home(){
     let [tasks, setTasks] = useState([]);
@@ -17,7 +19,7 @@ export function Home(){
         try {
             axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
                 headers: headers,})
-                .then(response => setTasks(response.data))
+                .then(response => {setTasks(response.data)})
                 .catch(error => setTasks(error.response))
         } catch (err) {
             console.log(err)
@@ -78,6 +80,41 @@ export function Home(){
 
     }
 
+    function unDoneTask(id){
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        try {
+            axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/undone`, {
+                headers: headers,})
+                .catch(error => setTasks(error.response))
+        } catch (err) {
+            console.log(err)
+        }
+
+        let index = 0;
+        for(index; index<tasks.length; index++) {
+            if (tasks[index].id === id) {
+                break;
+            }
+        }
+
+        const newList=[];
+        for(let i=0; i < tasks.length; i++){
+            if(i !== index) {
+                newList.push(tasks[i])
+            }
+            else {
+                tasks[i].is_done = false
+                newList.push(tasks[i])
+            }
+        }
+
+        setTasks(newList);
+
+    }
+
     useEffect(() => {
         getTasks();
     }, []);
@@ -115,11 +152,19 @@ export function Home(){
                               {tasks.map((item) => (
                                   <tr key = { item.id }>
                                       <td><a href={`/task/${item.id}`}
-                                             className={item.is_done?"text-decoration-line-through text-white"
-                                                                    :"text-decoration-none text-white"}>{item.title}</a></td>
-                                      <td className="w-25">
-                                          <Button className="me-2" onClick={()=>delTask(item.id)}>Del btn</Button>
-                                          {item.is_done?<></>:<Button onClick={()=>doneTask(item.id)}>Done btn</Button>}
+                                             className={item.is_done?"d-flex text-decoration-line-through text-white"
+                                                 :"d-flex text-decoration-none text-white"}>{item.title}<div className="ms-2">{CreateWhiteIco(<MdEdit />)}</div></a>
+                                      </td>
+                                      <td className="w-25 text-center">
+                                          {item.is_done
+                                              ?<Button className="me-3 pb-2" onClick={()=>unDoneTask(item.id)}>
+                                                  {CreateWhiteIco(<MdOutlineCheckBox/>)}
+                                               </Button>
+                                              :<Button className="me-3 pb-2" onClick={()=>doneTask(item.id)}>
+                                                      {CreateWhiteIco(<MdOutlineCheckBoxOutlineBlank/>)}
+                                               </Button>
+                                          }
+                                          <Button className="pb-2 btn-danger" onClick={()=>delTask(item.id)}>{CreateWhiteIco(<MdDeleteForever />)}</Button>
                                       </td>
                                   </tr>
                               ))
@@ -143,10 +188,9 @@ export function Home(){
                   <i className="fas fa-check-square me-1"></i>
                   <u>My Todo-s</u>
               </div>
-              {/*TODO fix hear*/}
-              {tasks !== undefined
+              {tasks
                   ?   <>
-                      {tasks.length === 0
+                      {tasks.length === 0 && tasks
                           ? notHaveTodoMsg()
                           : todoList()
                       }
@@ -164,7 +208,7 @@ export function Home(){
                 <div style={{height: "90vh"}} className="d-flex flex-column justify-content-center">
                     <h1 className="text-center fw-bold">Hello stranger!</h1>
                     <h3 className="text-center">This simple todo app</h3>
-                    <p className="text-center fw-light">You need login or register to creating new tasks</p>
+                    <p className="text-center fw-light">You need login or register to create new tasks</p>
                 </div>
             </>
         )
@@ -174,6 +218,7 @@ export function Home(){
         <div>
             <div className="dark">
                 {isAuth
+                    // TODO add lazy
                     ? authContent()
                     : guestContent()
                 }

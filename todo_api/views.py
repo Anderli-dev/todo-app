@@ -59,6 +59,17 @@ class TaskDoneView(UpdateAPIView):
         return Response({"msg": "Task is done"}, status=status.HTTP_200_OK)
 
 
+class TaskUnDoneView(UpdateAPIView):
+    serializer_class = TaskSerializer
+
+    def update(self, request, *args, **kwargs):
+        id = self.kwargs["id"]
+        task = Task.objects.filter(author_id=self.request.user, id=id)
+        task.update(is_done=False)
+
+        return Response({"msg": "Task is done"}, status=status.HTTP_200_OK)
+
+
 class Logout(APIView):
     permission_classes = (permissions.AllowAny,)
 
