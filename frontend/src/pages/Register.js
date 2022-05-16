@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate, useLocation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export function Register(props) {
     const [formData, setFormData] = useState({
@@ -12,7 +12,7 @@ export function Register(props) {
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState({});
-    const location = useLocation()
+    const navigate = useNavigate()
 
     const { username, password, re_password } = formData;
 
@@ -35,12 +35,10 @@ export function Register(props) {
         } catch (err) {
             console.log(err)
         }
-    };
 
-    if (res.status === 200) {
         Cookies.set("logged_in", "yes")
-        return <Navigate to={location.state.prevLocation} replace/>
-    }
+        navigate("/")
+    };
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>

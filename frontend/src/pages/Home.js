@@ -1,161 +1,56 @@
-import React, {useEffect, useState} from "react";
-import {Button, Table} from "react-bootstrap";
-import {Scrollbars} from 'react-custom-scrollbars';
-import axios from "axios";
+import React, {lazy, Suspense, useState} from "react";
 import Cookies from "js-cookie";
-import {DeleteTask} from "../actions/DeleteTask";
+import {Spinner} from "react-bootstrap";
+import axios from "axios";
+
+const TodoList = lazy(()=>import('../components/TodoList'))
 
 export function Home(){
-    let [tasks, setTasks] = useState([]);
     const isAuth = Cookies.get("logged_in")
+    const [isLoad] = useState(true)
+    const [isData, setIsData] = useState(true);
 
     function getTasks(){
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        try {
-            axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
-                headers: headers,})
-                .then(response => setTasks(response.data))
-                .catch(error => setTasks(error.response))
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    function delTask(id){
-        DeleteTask(id)
-
-        let index = 0;
-        for(index; index<tasks.length; index++) {
-            if (tasks[index].id === id) {
-                break;
-            }
-        }
-        const newList=[];
-        for(let i=0; i < tasks.length; i++){
-            if(i !== index) {
-                newList.push(tasks[i])
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            };
+            try {
+                axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
+                    headers: headers,})
+                    .then(response => {if (!response.data.length) {setIsData(false) }
+                                       else {setIsData(true);}
+                    })
+                    .catch(error => console.log(error))
+            } catch (err) {
+                console.log(err)
             }
         }
 
-        setTasks(newList);
-    }
-
-    function doneTask(id){
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        try {
-            axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/done`, {
-                headers: headers,})
-                .catch(error => setTasks(error.response))
-        } catch (err) {
-            console.log(err)
-        }
-
-        let index = 0;
-        for(index; index<tasks.length; index++) {
-            if (tasks[index].id === id) {
-                break;
-            }
-        }
-
-        const newList=[];
-        for(let i=0; i < tasks.length; i++){
-            if(i !== index) {
-                newList.push(tasks[i])
-            }
-            else {
-                tasks[i].is_done = true
-                newList.push(tasks[i])
-            }
-        }
-
-        setTasks(newList);
-
-    }
-
-    useEffect(() => {
-        getTasks();
-    }, []);
-
-    const notHaveTodoMsg = () => {
+    function todoList(){
         return(
             <>
-                <div className="d-flex flex-column" style={{height: "69vh"}}>
-                    <div className="">
-                        <h2 className="text-muted mt-5 text-center">You dont have todo-s yet...</h2>
-                        <h1 className="text-muted text-center ">:(</h1>
-                    </div>
-                    <div className="text-center mt-auto mt-5"><a href={"/task/create"} >Clik hear to create one</a></div>
-                </div>
+                {isLoad && (
+                    <Suspense fallback={
+                        <div style={{marginTop:"30%"}} className="container d-flex justify-content-center">
+                            <Spinner className="" animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </div>
+                    }>
+
+                        <TodoList isData={isData}/>
+                    </Suspense>
+                )}
+
             </>
         )
     }
 
-    const todoList = () => {
-      return(
-          <>
-              <div className="card" style={{backgroundColor: "#7a8794"}}>
-                  <div className="card-body" data-mdb-perfect-scrollbar="true">
-                      <Table striped bordered hover variant="dark" className="m-0" >
-                          <thead>
-                          <tr>
-                              <th className="border-bottom">Task</th>
-                              <th className="text-center w-25 border-bottom">Actions</th>
-                          </tr>
-                          </thead>
-                      </Table>
-                      <Scrollbars style={{ width: "100%", height: "47vh"}}>
-                          <Table striped bordered hover variant="dark">
-                              <tbody>
-                              {tasks.map((item) => (
-                                  <tr key = { item.id }>
-                                      <td><a href={`/task/${item.id}`}
-                                             className={item.is_done?"text-decoration-line-through text-white"
-                                                                    :"text-decoration-none text-white"}>{item.title}</a></td>
-                                      <td className="w-25">
-                                          <Button className="me-2" onClick={()=>delTask(item.id)}>Del btn</Button>
-                                          {item.is_done?<></>:<Button onClick={()=>doneTask(item.id)}>Done btn</Button>}
-                                      </td>
-                                  </tr>
-                              ))
-                              }
-                              </tbody>
-                          </Table>
-                      </Scrollbars>
-                  </div>
-                  <div className="card-footer text-end p-3">
-                      <Button href="task/create" className="btn btn-secondary">Add Task</Button>
-                  </div>
-              </div>
-          </>
-      )
-    }
-
     const authContent = () => {
-      return(
-          <>
-              <div className="h1 my-2 pb-3 text-center">
-                  <i className="fas fa-check-square me-1"></i>
-                  <u>My Todo-s</u>
-              </div>
-              {/*TODO fix hear*/}
-              {tasks !== undefined
-                  ?   <>
-                      {tasks.length === 0
-                          ? notHaveTodoMsg()
-                          : todoList()
-                      }
-                      </>
-                  :
-                  <></>
-              }
-            </>
-      )
+        return(
+            todoList()
+        )
     }
 
     const guestContent = ()=>{
@@ -164,7 +59,7 @@ export function Home(){
                 <div style={{height: "90vh"}} className="d-flex flex-column justify-content-center">
                     <h1 className="text-center fw-bold">Hello stranger!</h1>
                     <h3 className="text-center">This simple todo app</h3>
-                    <p className="text-center fw-light">You need login or register to creating new tasks</p>
+                    <p className="text-center fw-light">You need login or register to create new tasks</p>
                 </div>
             </>
         )

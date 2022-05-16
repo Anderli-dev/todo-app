@@ -4,16 +4,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Provider} from "react-redux";
+import {store} from "./store";
 
 axios.defaults.withCredentials = true
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 ReactDOM.render(
-    // TODO customize all project in material style
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>,
+    //TODO add 404 page
+    <Provider store={store}>
+        <React.StrictMode>
+            <App/>
+        </React.StrictMode>
+    </Provider>,
   document.getElementById('root')
 );
 

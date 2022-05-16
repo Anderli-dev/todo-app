@@ -48,15 +48,19 @@ class TaskDeleteView(DestroyAPIView):
         return get_object_or_404(Task, author_id=self.request.user, id=id)
 
 
-class TaskDoneView(UpdateAPIView):
+class TaskStatusView(UpdateAPIView):
     serializer_class = TaskSerializer
 
     def update(self, request, *args, **kwargs):
         id = self.kwargs["id"]
         task = Task.objects.filter(author_id=self.request.user, id=id)
-        task.update(is_done=True)
+        if request.data["task_status"] == "done":
+            task.update(is_done=True)
 
-        return Response({"msg": "Task is done"}, status=status.HTTP_200_OK)
+        if request.data["task_status"] == "un_done":
+            task.update(is_done=False)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class Logout(APIView):

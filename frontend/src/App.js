@@ -9,14 +9,15 @@ import Cookies from "js-cookie";
 import {Register} from "./pages/Register";
 import {CreateTODO} from "./pages/CreateTODO";
 import {Todo} from "./pages/Todo";
+import {PageNotFound} from "./pages/404";
 
 function App() {
     document.body.style.overflow = 'overlay';
     const isAuth = Cookies.get("logged_in")
     const authLinks = (
         <>
-            <Route replace path="/" element={<Home/>}/>
-            <Route replace path="/task/create" element={<CreateTODO/>}/>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/task/create" element={<CreateTODO/>}/>
             <Route path="/task/:id" element={<Todo/>}/>
         </>);
     const guestLinks = (<Route replace path="/" element={<Home/>}/>);
@@ -26,9 +27,10 @@ function App() {
                 <Route element={ <Layout/> }>
                     {isAuth ? authLinks : guestLinks}
                 </Route>
-                <Route replace path="/login" element={<Login/>}/>
-                <Route replace path="/register" element={<Register/>}/>
-                <Route replace path="" element={<Logout/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
+                <Route path="" element={<Logout/>}/>
+                <Route path="*" element={<PageNotFound/>}/>
             </Routes>
         </Router>
     );

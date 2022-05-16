@@ -2,7 +2,10 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {CreateWhiteIco} from "../actions/CreateWhiteIco";
+import {MdAddCircleOutline} from "react-icons/md";
+import {useDispatch} from "react-redux";
 
 export function CreateTODO(props) {
     const [formData, setFormData] = useState({
@@ -10,7 +13,9 @@ export function CreateTODO(props) {
         description: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
-    let [res, setResponse] = useState({});
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
     const { title, description } = formData;
 
@@ -28,16 +33,14 @@ export function CreateTODO(props) {
             axios.post(`${process.env.REACT_APP_API_URL}/api/task/create/`, body,{
                     headers: headers,
                 })
-                .then(response => setResponse(response))
-                .catch(error => setResponse(error.response))
+                .catch(error => console.log(error))
         } catch (err) {
             console.log(err)
         }
-    };
 
-    if (res.status === 201) {
-        return <Navigate to={"/"} replace/>
-    }
+        navigate("/", {replace:true})
+        dispatch({type:"SHOW_MSG", msg:"Success!Task created"})
+    };
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
@@ -66,7 +69,10 @@ export function CreateTODO(props) {
                 </div>
 
                 <div className="d-flex justify-content-start">
-                    <button type="submit" className="btn btn-primary btn-block mb-4 w-25">Add</button>
+                    <button type="submit" className="d-flex justify-content-center btn btn-primary btn-block mb-4 w-25">
+                        Add
+                        <div className="ms-1">{CreateWhiteIco(<MdAddCircleOutline/>)}</div>
+                    </button>
                 </div>
             </form>
         </div>

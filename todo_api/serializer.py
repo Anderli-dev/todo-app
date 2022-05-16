@@ -9,7 +9,7 @@ from .models import *
 class UserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('username', 'id', 'password')
+        fields = ('username',)
 
 
 class TaskSerializer(ModelSerializer):
