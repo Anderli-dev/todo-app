@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import {CSRFToken} from "../components/CSRFToken";
 import Cookies from "js-cookie";
 import axios from "axios";
-import {Navigate, useNavigate} from "react-router-dom";
-import {SuccessModal} from "../components/ModalSuccessMsg";
+import {useNavigate} from "react-router-dom";
 import {CreateWhiteIco} from "../actions/CreateWhiteIco";
 import {MdAddCircleOutline} from "react-icons/md";
+import {useDispatch} from "react-redux";
 
 export function CreateTODO(props) {
     const [formData, setFormData] = useState({
@@ -13,18 +13,13 @@ export function CreateTODO(props) {
         description: ""
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
-    const [isSave, setIsSave] = useState(false);
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
     const { title, description } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-        const showSuccessMsg = () => {
-        setTimeout(()=>{setIsSave(false)}, 2150)
-        return <SuccessModal text={"Success!Changes saved"}/>
-    }
 
     const loginSubmit = e => {
         e.preventDefault()
@@ -44,12 +39,11 @@ export function CreateTODO(props) {
         }
 
         navigate("/", {replace:true})
-        setIsSave(true)
+        dispatch({type:"SHOW_MSG", msg:"Success!Task created"})
     };
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
-             {isSave && showSuccessMsg()}
             <form onSubmit={loginSubmit} className={"w-75"}>
                 <CSRFToken/>
                 <div className="form-outline mb-4 w-25">

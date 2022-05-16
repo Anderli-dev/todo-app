@@ -4,9 +4,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import {DeleteTask} from "../actions/DeleteTask";
-import {SuccessModal} from "../components/ModalSuccessMsg";
 import {CreateWhiteIco} from "../actions/CreateWhiteIco";
 import {MdSave} from "react-icons/md"
+import {useDispatch} from "react-redux";
 
 export function Todo() {
     const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export function Todo() {
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     let [res, setResponse] = useState([]);
     const [isSave, setIsSave] = useState(false);
+    const dispatch = useDispatch()
 
     const {id} = useParams();
     const navigate = useNavigate()
@@ -63,22 +64,19 @@ export function Todo() {
         } catch (err) {
             console.log(err)
         }
-        setIsSave(true)
+        dispatch({type:"SHOW_MSG", msg:"Success!Changes saved"})
     };
+
+    // this line code important
+    document.body.style.overflow = 'overlay'
 
     function delTask(id){
         DeleteTask(id)
         navigate("/")
     }
 
-    const showSuccessMsg = () => {
-        setTimeout(()=>{setIsSave(false)}, 2150)
-        return <SuccessModal text={"Success!Changes saved"}/>
-    }
-
     return (
         <div className="d-flex justify-content-center vh-100 align-items-center">
-            {isSave && showSuccessMsg()}
             <form onSubmit={taskSubmit} className="w-75">
                 <CSRFToken/>
                 <div className="form-outline mb-4 w-25">
