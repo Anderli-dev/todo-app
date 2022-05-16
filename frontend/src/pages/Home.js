@@ -3,6 +3,7 @@ import {Button, Table} from "react-bootstrap";
 import {Scrollbars} from 'react-custom-scrollbars';
 import axios from "axios";
 import Cookies from "js-cookie";
+import {UpdateStatus} from "../actions/UpdateStatus"
 import {DeleteTask} from "../actions/DeleteTask";
 import {CreateWhiteIco} from "../actions/CreateWhiteIco";
 import {MdDeleteForever, MdEdit, MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank} from "react-icons/md";
@@ -20,7 +21,7 @@ export function Home(){
             axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
                 headers: headers,})
                 .then(response => {setTasks(response.data)})
-                .catch(error => setTasks(error.response))
+                .catch(error => console.log(error))
         } catch (err) {
             console.log(err)
         }
@@ -41,22 +42,17 @@ export function Home(){
                 newList.push(tasks[i])
             }
         }
-
         setTasks(newList);
+
+        getTasks()
     }
 
     function doneTask(id){
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        try {
-            axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/done`, {
-                headers: headers,})
-                .catch(error => setTasks(error.response))
-        } catch (err) {
-            console.log(err)
+        const body = {
+            task_status:"done"
         }
+        
+        UpdateStatus(body, id)
 
         let index = 0;
         for(index; index<tasks.length; index++) {
@@ -77,21 +73,14 @@ export function Home(){
         }
 
         setTasks(newList);
-
     }
 
     function unDoneTask(id){
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        try {
-            axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id +`/undone`, {
-                headers: headers,})
-                .catch(error => setTasks(error.response))
-        } catch (err) {
-            console.log(err)
+        const body = {
+            task_status:"un_done"
         }
+
+        UpdateStatus(body, id)
 
         let index = 0;
         for(index; index<tasks.length; index++) {
@@ -149,7 +138,7 @@ export function Home(){
                       <Scrollbars style={{ width: "100%", height: "47vh"}}>
                           <Table striped bordered hover variant="dark">
                               <tbody>
-                              {tasks.map((item) => (
+                              {tasks.map(item => (
                                   <tr key = { item.id }>
                                       <td><a href={`/task/${item.id}`}
                                              className={item.is_done?"d-flex text-decoration-line-through text-white"
