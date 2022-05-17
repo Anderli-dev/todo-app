@@ -12,7 +12,6 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 ReactDOM.render(
-    //TODO add 404 page
     <Provider store={store}>
         <React.StrictMode>
             <App/>

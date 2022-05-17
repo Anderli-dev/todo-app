@@ -22,6 +22,7 @@ export function CreateTODO(props) {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const loginSubmit = e => {
+        // task creating
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -39,6 +40,8 @@ export function CreateTODO(props) {
         }
 
         navigate("/", {replace:true})
+
+        // call success msg from redux store
         dispatch({type:"SHOW_MSG", msg:"Success!Task created"})
     };
 
