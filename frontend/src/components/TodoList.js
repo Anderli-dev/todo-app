@@ -20,15 +20,19 @@ export default () => {
                 break;
             }
         }
-        const newList=[];
-        for(let i=0; i < tasks.length; i++){
-            if(i !== index) {
-                newList.push(tasks[i])
+        console.log(index)
+        if(index !== 0) {
+            const newList = [];
+            for (let i = 0; i < tasks.length; i++) {
+                if (i !== index) {
+                    newList.push(tasks[i])
+                }
             }
+            setTasks(newList);
+        }else {
+            setIsData(false)
         }
-        setTasks(newList);
 
-        getTasks()
     }
 
     function doneTask(id){

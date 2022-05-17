@@ -36,6 +36,8 @@ export function Register(props) {
             console.log(err)
         }
 
+        localStorage.setItem('user', username);
+
         Cookies.set("logged_in", "yes")
         navigate("/")
     };

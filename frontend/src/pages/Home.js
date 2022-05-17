@@ -1,31 +1,12 @@
 import React, {lazy, Suspense, useState} from "react";
 import Cookies from "js-cookie";
 import {Spinner} from "react-bootstrap";
-import axios from "axios";
 
 const TodoList = lazy(()=>import('../components/TodoList'))
 
 export function Home(){
     const isAuth = Cookies.get("logged_in")
     const [isLoad] = useState(true)
-    const [isData, setIsData] = useState(true);
-
-    function getTasks(){
-            const headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            };
-            try {
-                axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
-                    headers: headers,})
-                    .then(response => {if (!response.data.length) {setIsData(false) }
-                                       else {setIsData(true);}
-                    })
-                    .catch(error => console.log(error))
-            } catch (err) {
-                console.log(err)
-            }
-        }
 
     function todoList(){
         return(
@@ -39,7 +20,7 @@ export function Home(){
                         </div>
                     }>
 
-                        <TodoList isData={isData}/>
+                        <TodoList/>
                     </Suspense>
                 )}
 
