@@ -14,21 +14,26 @@ export default () => {
     function delTask(id){
         DeleteTask(id)
 
+        // after deleting need rebuild array
         let index = 0;
         for(index; index<tasks.length; index++) {
             if (tasks[index].id === id) {
                 break;
             }
         }
-        const newList=[];
-        for(let i=0; i < tasks.length; i++){
-            if(i !== index) {
-                newList.push(tasks[i])
+        console.log(index)
+        if(index !== 0) {
+            const newList = [];
+            for (let i = 0; i < tasks.length; i++) {
+                if (i !== index) {
+                    newList.push(tasks[i])
+                }
             }
+            setTasks(newList);
+        }else {
+            setIsData(false)
         }
-        setTasks(newList);
 
-        getTasks()
     }
 
     function doneTask(id){
@@ -37,6 +42,8 @@ export default () => {
         }
 
         UpdateStatus(body, id)
+
+        // after updating need rebuild array
 
         let index = 0;
         for(index; index<tasks.length; index++) {
@@ -66,6 +73,8 @@ export default () => {
 
         UpdateStatus(body, id)
 
+        // after updating need rebuild array
+
         let index = 0;
         for(index; index<tasks.length; index++) {
             if (tasks[index].id === id) {
@@ -89,20 +98,20 @@ export default () => {
     }
 
     function getTasks(){
-            const headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            };
-            try {
-                axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
-                    headers: headers,})
-                    .then(response => {if (!response.data.length) {setIsData(false) }
-                                       else {setIsData(true); setTasks(response.data)}
-                    })
-                    .catch(error => console.log(error))
-            } catch (err) {
-                console.log(err)
-            }
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        try {
+            axios.get(`${process.env.REACT_APP_API_URL}/api/tasks/`, {
+                headers: headers,})
+                .then(response => {if (!response.data.length) {setIsData(false) }
+                else {setIsData(true); setTasks(response.data)}
+                })
+                .catch(error => console.log(error))
+        } catch (err) {
+            console.log(err)
+        }
         }
 
     useEffect(() => {
@@ -153,6 +162,7 @@ export default () => {
                                             </a>
                                             </td>
                                             <td className="w-25 text-center">
+                                                {/* different checkbox for different status*/}
                                                 {item.is_done
                                                     ? <Button className="me-3 pb-2" onClick={() => unDoneTask(item.id)}>
                                                         {CreateWhiteIco(<MdOutlineCheckBox/>)}

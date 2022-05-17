@@ -15,8 +15,6 @@ export function Todo() {
         is_done: null
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
-    let [res, setResponse] = useState([]);
-    const [isSave, setIsSave] = useState(false);
     const dispatch = useDispatch()
 
     const {id} = useParams();
@@ -27,6 +25,7 @@ export function Todo() {
         [e.target.name]: e.target.type === 'checkbox'? e.target.checked : e.target.value });
 
     useEffect(() => {
+        // load task
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -40,7 +39,7 @@ export function Todo() {
                                                     ["description"]: response.data["description"],
                                                     ["is_done"]: response.data["is_done"]});
                 })
-                .catch(error => setResponse(error.response))
+                .catch(error => console.log(error.response))
         }
         catch (err) {
             console.log(err)
@@ -48,6 +47,7 @@ export function Todo() {
     }, []);
 
     const taskSubmit = e => {
+        // save changes
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -59,11 +59,11 @@ export function Todo() {
             axios.put(`${process.env.REACT_APP_API_URL}/api/task/`+ id, body,{
                     headers: headers,
                 })
-                .then(response => setResponse(response))
-                .catch(error => setResponse(error.response))
+                .catch(error => console.log(error.response))
         } catch (err) {
             console.log(err)
         }
+        // call success msg from redux store
         dispatch({type:"SHOW_MSG", msg:"Success!Changes saved"})
     };
 

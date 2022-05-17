@@ -19,6 +19,7 @@ export function Register(props) {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const regSubmit = e => {
+        // user register
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -36,6 +37,10 @@ export function Register(props) {
             console.log(err)
         }
 
+        // set username for using in navbar
+        localStorage.setItem('user', username);
+
+        // set logged_in for using in home show is auth content
         Cookies.set("logged_in", "yes")
         navigate("/")
     };
@@ -90,6 +95,7 @@ export function Register(props) {
                                 placeholder="Repeat password"
                                 required/>
                         </div>
+                        {/* alert msg */}
                         {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">

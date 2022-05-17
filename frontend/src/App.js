@@ -24,7 +24,9 @@ function App() {
     return (
         <Router>
             <Routes>
+                {/* use layout for automatically adding navbar */}
                 <Route element={ <Layout/> }>
+                    {/* show different links logic */}
                     {isAuth ? authLinks : guestLinks}
                 </Route>
                 <Route path="/login" element={<Login/>}/>

@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie"
 
 export const CSRFToken = () => {
+    // just getting token
     const [csrftoken, setcsrftoken] = useState(Cookies.get("csrftoken"));
 
     useEffect(() => {

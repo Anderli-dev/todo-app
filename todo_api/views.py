@@ -19,6 +19,7 @@ class TaskView(ListAPIView):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
+        # return tasks user only create
         queryset = Task.objects.filter(author_id=self.request.user.id)
         return queryset
 
@@ -29,6 +30,7 @@ class TaskDetailView(RetrieveUpdateAPIView):
 
     def get_object(self):
         id = self.kwargs["id"]
+        # return task user only create or return 404
         return get_object_or_404(Task, author_id=self.request.user, id=id)
 
 
@@ -37,6 +39,7 @@ class TaskCreateView(CreateAPIView):
     serializer_class = TaskSerializer
 
     def perform_create(self, serializer):
+        # manually add author to task
         return serializer.save(author_id=self.request.user)
 
 
@@ -45,6 +48,7 @@ class TaskDeleteView(DestroyAPIView):
 
     def get_object(self):
         id = self.kwargs["id"]
+        # delete task user only create
         return get_object_or_404(Task, author_id=self.request.user, id=id)
 
 
@@ -52,6 +56,9 @@ class TaskStatusView(UpdateAPIView):
     serializer_class = TaskSerializer
 
     def update(self, request, *args, **kwargs):
+        # Decided to combine the logic done and undone
+        # just for better understanding.
+        # Need on frontend side just send additional data
         id = self.kwargs["id"]
         task = Task.objects.filter(author_id=self.request.user, id=id)
         if request.data["task_status"] == "done":
@@ -73,6 +80,7 @@ class Logout(APIView):
 
 @method_decorator(csrf_protect, name="dispatch")
 class LoginView(APIView):
+    # typical login logic but may be need add more validation
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
@@ -94,6 +102,7 @@ class LoginView(APIView):
 
 @method_decorator(csrf_protect, name="dispatch")
 class RegisterView(APIView):
+    # typical register logic but may be need add more validation
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):

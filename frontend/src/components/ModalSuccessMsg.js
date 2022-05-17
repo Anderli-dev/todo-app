@@ -8,6 +8,7 @@ export function SuccessModal(){
     const dispatch = useDispatch()
 
     const close = () =>{
+        // this timer need for closing msg
         setTimeout(() => {dispatch({type:"HIDE_MSG"})}, 2000)
     }
 

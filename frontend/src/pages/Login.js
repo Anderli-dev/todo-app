@@ -16,6 +16,7 @@ export function Login() {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const loginSubmit = e => {
+        // user login
         e.preventDefault()
         const headers = {
             'Accept': 'application/json',
@@ -33,10 +34,12 @@ export function Login() {
             console.log(err)
         }
 
+        // set logged_in for using in home show is auth content
         Cookies.set("logged_in", "yes")
     };
 
     if (res.status === 200) {
+        // use only like this
         localStorage.setItem('user', username);
         return <Navigate to={"/"} replace/>
     }
@@ -74,6 +77,7 @@ export function Login() {
                                 placeholder="Password"
                                 required/>
                         </div>
+                        {/* alert msg */}
                         {res.status === 403 && (<p className={"alert alert-danger"}>{res.data["error"]}</p>)}
                         <div className="row mb-4">
                             <div className="col-md-6 d-flex justify-content-center w-100">
