@@ -72,7 +72,7 @@ export function Todo() {
 
     function delTask(id){
         DeleteTask(id)
-        navigate("/")
+        navigate("/", {replace:true})
     }
 
     return (

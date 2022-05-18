@@ -8,7 +8,7 @@ export const CSRFToken = () => {
 
     useEffect(() => {
         if(!csrftoken){
-                        axios.get(`${process.env.REACT_APP_API_URL}/api/csrf_cookie/`)
+            axios.get(`${process.env.REACT_APP_API_URL}/api/csrf_cookie/`)
                 .then(setcsrftoken(Cookies.get("csrftoken")))
                 .catch(error => console.log(error));
         }
