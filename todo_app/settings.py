@@ -135,7 +135,7 @@ CORS_ALLOW_HEADERS = (
 )
 
 CORS_ORIGIN_WHITELIST = [
-    "https://my-dj-react-simple-todo-app.herokuapp.co"
+    "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
@@ -143,14 +143,14 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://my-dj-react-simple-todo-app.herokuapp.co"
+    "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://my-dj-react-simple-todo-app.herokuapp.co"
+    "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
