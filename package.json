@@ -48,5 +48,5 @@
     "node": "15.3.0",
     "npm": "6.14.11"
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "https://my-dj-react-simple-todo-app.herokuapp.co"
 }
