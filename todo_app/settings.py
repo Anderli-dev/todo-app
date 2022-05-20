@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-41c3^--+1s392l3b)+p99r1l5_hb4n+cqfuomjg5b=$(%6+%sq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["https://my-dj-react-simple-todo-app.herokuapp.com", "http://localhost:8000", "http://127.0.0.1:8000",]
 
 
 # Application definition
@@ -52,7 +52,7 @@ ROOT_URLCONF = 'todo_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'frontend/templates'],
+        'DIRS': [BASE_DIR / 'build'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,9 +113,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'build/static')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'staticfiles/static'),
+    os.path.join(BASE_DIR, 'build/static'),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
@@ -136,23 +136,17 @@ CORS_ALLOW_HEADERS = (
 
 CORS_ORIGIN_WHITELIST = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
