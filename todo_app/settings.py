@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import django_heroku
+from dotenv import load_dotenv, find_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -11,10 +12,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-41c3^--+1s392l3b)+p99r1l5_hb4n+cqfuomjg5b=$(%6+%sq'
+load_dotenv(find_dotenv())
+
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["https://my-dj-react-simple-todo-app.herokuapp.com", "http://localhost:8000", "http://127.0.0.1:8000",]
 
