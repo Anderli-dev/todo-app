@@ -19,7 +19,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://my-dj-react-simple-todo-app.herokuapp.com", "http://localhost:8000", "http://127.0.0.1:8000",]
+ALLOWED_HOSTS = ["https://my-dj-react-simple-todo-app.herokuapp.com",
+                 "http://localhost:8000",
+                 "http://127.0.0.1:8000"]
 
 
 # Application definition
@@ -120,7 +122,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles',)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'build/static'),
 )
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 # Default primary key field type
@@ -172,5 +174,3 @@ django_heroku.settings(locals())
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
-
-django_heroku.settings(config=locals(), staticfiles=False,logging=False)
