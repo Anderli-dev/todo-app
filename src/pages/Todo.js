@@ -12,7 +12,7 @@ export function Todo() {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        is_done: null
+        is_done: false
     });
     const [csrftoken] = useState(Cookies.get("csrftoken"));
     const dispatch = useDispatch()

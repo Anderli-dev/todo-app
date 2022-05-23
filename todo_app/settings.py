@@ -21,7 +21,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["https://my-dj-react-simple-todo-app.herokuapp.com",
                  "http://localhost:8000",
-                 "http://127.0.0.1:8000"]
+                 "http://127.0.0.1:8000",
+                 "http://localhost:3000",
+                 ]
 
 
 # Application definition
@@ -144,17 +146,20 @@ CORS_ORIGIN_WHITELIST = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:3000",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:3000",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://my-dj-react-simple-todo-app.herokuapp.com",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:3000",
 ]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
