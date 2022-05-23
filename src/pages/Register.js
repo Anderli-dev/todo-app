@@ -36,14 +36,16 @@ export function Register(props) {
         } catch (err) {
             console.log(err)
         }
+    };
 
+    if (res.status === 200) {
         // set username for using in navbar
         localStorage.setItem('user', username);
 
         // set logged_in for using in home show is auth content
         Cookies.set("logged_in", "yes")
         navigate("/")
-    };
+    }
 
     return (
         <div className={"d-flex justify-content-center vh-100 align-items-center"}>
