@@ -21,4 +21,4 @@ Login and registration was done with django session authentication. Added model 
 DRF is responsible for browsable API and serializing data.
 ### WhiteNoise
 WhiteNoise is responsible for static files.
-###Project deployed on Heroku!
+## Project deployed on Heroku!
